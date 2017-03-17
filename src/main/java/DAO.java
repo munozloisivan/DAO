@@ -63,15 +63,13 @@ public abstract class DAO {
         sb.append(" WHERE ");
         sb.append(" ? = ?");
 
-        System.out.println("DELETE query --> "+sb.toString() );
+        System.out.println("SELECT query --> "+sb.toString() );
     }
 
     public void delete(){
-
         StringBuffer sb = new StringBuffer("DELETE FROM ");
         sb.append(this.getClass().getName());
         sb.append(" WHERE ");
-        Field[] fields = this.getClass().getDeclaredFields();
-
+        sb.append(" ? =").append(" ?");
     }
 }
