@@ -34,11 +34,29 @@ public abstract class DAO {
                 sb.append(",");
         }
         sb.append(")");
-        System.out.println(sb.toString());
+        System.out.println("INSERT query --> "+sb.toString());
 
     }
 
-    public void update(DAO d){
-        System.out.println("Update: " +d.getClass().getDeclaredFields());
+    public void update(){
+
+        System.out.println("Update: " +this.getClass().getName());
+        StringBuffer sb = new StringBuffer("UPDATE ").append(this.getClass().getName()).append(" SET ");
+
+        Field[] fields = this.getClass().getDeclaredFields();
+        int numfields = 0;
+        for (Field f : fields){
+            if (numfields == fields.length -1){
+                sb.append(f.getName() + "=?");
+            }
+            else{
+                sb.append(f.getName() + "=?,");
+            }
+            numfields++;
+        }
+        System.out.println("UPDATE query --> "+sb.toString());
+
     }
+
+    
 }
