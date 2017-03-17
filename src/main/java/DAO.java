@@ -10,8 +10,8 @@ public abstract class DAO {
     private String getValues(Field field){
         String val = null;
         try {
-            Method met = this.getClass().getMethod(field.getName(),null);
-            val = (String)met.invoke(this,null);
+            Method met = this.getClass().getMethod(getUpper(field.getName()),null);
+            val = met.invoke(this,null).toString();
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -20,6 +20,12 @@ public abstract class DAO {
             e.printStackTrace();
         }
         return val;
+    }
+
+    //necesaria sino REVIENTA pq no pilla bien la clase
+    private String getUpper(String m){
+        String res = Character.toUpperCase(m.charAt(0)) + m.substring(1);
+        return "get".concat(res);
     }
 
 
@@ -39,12 +45,22 @@ public abstract class DAO {
         sb.append(")");
         System.out.println(sb.toString());
         sb.append(" VALUES (");
-        int j = 0;
+    /*    int j = 0;
         for (Field f : fields){
             sb.append("?");
             j++;
             if (j!= fields.length)
                 sb.append(",");
+        }*/
+        int j = 0;
+        for (Field f : fields){
+            if (j == fields.length -1){
+                 sb.append(getValues(f));
+            }
+            else {
+                sb.append(getValues(f)+",");
+            }
+            j++;
         }
         sb.append(")");
         System.out.println("INSERT query --> "+sb.toString());
