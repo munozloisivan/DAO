@@ -7,6 +7,7 @@ public class Main {
         Usuario u = new Usuario(1,"Ivan","ivan@mail.com","password");
         u.insert();
         u.update();
+        u.select();
 
     }
 }
