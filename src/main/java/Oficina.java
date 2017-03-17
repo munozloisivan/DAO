@@ -7,6 +7,7 @@ public class Oficina extends DAO{
     private String nombre, direccion;
 
     public Oficina(int id, String nombre, String direccion) {
+        super();
         this.id = id;
         this.nombre = nombre;
         this.direccion = direccion;

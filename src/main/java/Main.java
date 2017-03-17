@@ -9,7 +9,7 @@ public class Main {
         u.update(); //OK
         u.select(); //OK
         u.delete(); //OK
-        Oficina of = new Oficina("EETAC","Castefa");
+        Oficina of = new Oficina(1,"EETAC","Castefa");
         of.insert(); //OK
 
     }

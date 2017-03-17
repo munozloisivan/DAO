@@ -1,12 +1,38 @@
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * Created by ivanm on 15/03/2017.
  */
 public abstract class DAO {
+
+    //Conexión a la BBDD
+    public static Connection getConnection(){
+        Connection con = null;
+        try{
+            String host = "localhost", database = "dao";
+            int port = 3306;
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            String url = "jdbc:mysql://" + host + ":" + port + "/" + database;
+            Properties info = new Properties();
+            info.setProperty("user", "root");
+            info.setProperty("password", "mysql");
+            info.setProperty("useSSL", "false");
+            info.setProperty("serverTimezone", "UTC");
+            con = DriverManager.getConnection(url, info);
+            System.out.println("Conexión BBDD creada \n");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return con;
+    }
 
     private String getValues(Field field){
         String val = null;

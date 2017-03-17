@@ -8,6 +8,7 @@ public class Usuario extends DAO {
     public String nombre, email, password;
 
     public Usuario(int id, String nombre, String email, String password) {
+        super();
         this.id = id;
         this.nombre = nombre;
         this.email = email;
