@@ -1,12 +1,25 @@
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * Created by ivanm on 15/03/2017.
  */
 public abstract class DAO {
 
-    public void getValores(){
-
+    private String getValues(Field field){
+        String val = null;
+        try {
+            Method met = this.getClass().getMethod(field.getName(),null);
+            val = (String)met.invoke(this,null);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return val;
     }
 
 
@@ -71,5 +84,6 @@ public abstract class DAO {
         sb.append(this.getClass().getName());
         sb.append(" WHERE ");
         sb.append(" ? =").append(" ?");
+        System.out.println("DELETE query --> "+sb.toString());
     }
 }

@@ -8,6 +8,7 @@ public class Main {
         u.insert();
         u.update();
         u.select();
+        u.delete();
 
     }
 }
