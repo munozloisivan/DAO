@@ -5,10 +5,12 @@ public class Main {
         System.out.println("Hello World!");
 
         Usuario u = new Usuario(1,"Ivan","ivan@mail.com","password");
-        u.insert();
-        u.update();
-        u.select();
-        u.delete();
+        u.insert(); //OK
+        u.update(); //OK
+        u.select(); //OK
+        u.delete(); //OK
+        Oficina of = new Oficina("EETAC","Castefa");
+        of.insert(); //OK
 
     }
 }

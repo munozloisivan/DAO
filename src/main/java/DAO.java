@@ -1,6 +1,7 @@
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * Created by ivanm on 15/03/2017.
@@ -64,11 +65,9 @@ public abstract class DAO {
         }
         sb.append(")");
         System.out.println("INSERT query --> "+sb.toString());
-
     }
 
     public void update(){
-
         System.out.println("Update: " +this.getClass().getName());
         StringBuffer sb = new StringBuffer("UPDATE ").append(this.getClass().getName()).append(" SET ");
 
@@ -84,7 +83,6 @@ public abstract class DAO {
             numfields++;
         }
         System.out.println("UPDATE query --> "+sb.toString());
-
     }
 
     public void select(){
