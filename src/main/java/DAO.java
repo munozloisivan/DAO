@@ -1,15 +1,21 @@
+import org.apache.log4j.Logger;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.util.List;
+import java.sql.*;
 import java.util.Properties;
+
+import static org.apache.log4j.Logger.getLogger;
 
 /**
  * Created by ivanm on 15/03/2017.
  */
 public abstract class DAO {
+
+    //final static Logger logger = getLogger("DAO");
 
     //Conexión a la BBDD
     public static Connection getConnection(){
@@ -18,7 +24,6 @@ public abstract class DAO {
             String host = "localhost", database = "dao";
             int port = 3306;
             Class.forName("com.mysql.cj.jdbc.Driver");
-
             String url = "jdbc:mysql://" + host + ":" + port + "/" + database;
             Properties info = new Properties();
             info.setProperty("user", "root");
@@ -29,7 +34,7 @@ public abstract class DAO {
             System.out.println("Conexión BBDD creada \n");
         }
         catch (Exception e){
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return con;
     }
@@ -40,11 +45,11 @@ public abstract class DAO {
             Method met = this.getClass().getMethod(getUpper(field.getName()),null);
             val = met.invoke(this,null).toString();
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return val;
     }
@@ -56,7 +61,17 @@ public abstract class DAO {
     }
 
 
-    public void insert(){
+    public void insertElementos(PreparedStatement preparedStatement) throws NoSuchMethodException, SQLException, InvocationTargetException, IllegalAccessException {
+        int i = 1;
+        Field[] fields = this.getClass().getFields();
+        for (Field f : fields){
+            String res = getValues(f);
+            preparedStatement.setObject(i,res);
+            i++;
+        }
+    }
+
+    public void insert() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         StringBuffer sb = new StringBuffer("INSERT INTO ").append(this.getClass().getName());
 
         Field[] fields = this.getClass().getDeclaredFields();
@@ -70,16 +85,15 @@ public abstract class DAO {
                 sb.append(",");
         }
         sb.append(")");
-        System.out.println(sb.toString());
         sb.append(" VALUES (");
-    /*    int j = 0;
+        int j = 0;
         for (Field f : fields){
             sb.append("?");
             j++;
             if (j!= fields.length)
                 sb.append(",");
-        }*/
-        int j = 0;
+        }
+       /* int j = 0;
         for (Field f : fields){
             if (j == fields.length -1){
                  sb.append(getValues(f));
@@ -88,10 +102,20 @@ public abstract class DAO {
                 sb.append(getValues(f)+",");
             }
             j++;
-        }
+        }*/
         sb.append(")");
-        System.out.println("INSERT query --> "+sb.toString());
+        System.out.println("INSERT --> "+sb.toString()+"\n");
+
+        Connection con = getConnection();
+        try {
+            PreparedStatement preparedStatement = con.prepareStatement(sb.toString());
+            insertElementos(preparedStatement);
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
+
 
     public void update(){
         System.out.println("Update: " +this.getClass().getName());
@@ -108,7 +132,7 @@ public abstract class DAO {
             }
             numfields++;
         }
-        System.out.println("UPDATE query --> "+sb.toString());
+        System.out.println("UPDATE --> "+sb.toString());
     }
 
     public void select(){
@@ -116,7 +140,38 @@ public abstract class DAO {
         sb.append(" WHERE ");
         sb.append(" ? = ?");
 
-        System.out.println("SELECT query --> "+sb.toString() );
+        System.out.println("SELECT --> "+sb.toString() );
+    }
+
+    public void select(int pk){
+        StringBuffer sb = new StringBuffer();
+        sb.append("SELECT * FROM ").append(this.getClass().getName()).append(" WHERE ID = "+pk);
+        System.out.println("SELECT (PK) --> "+sb.toString()+"\n");
+
+        Connection con = getConnection();
+        try{
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(sb.toString());
+            ResultSetMetaData rsmd = rs.getMetaData();
+            rs.next();
+
+            for (int i=1; i< rsmd.getColumnCount() +1; i++){ //nº de columnas de la tabla
+                //separaas en funcion tel tipo que sean para convertir cada una
+                if (rsmd.getColumnTypeName(i).equals("INT")){
+                    System.out.println(rsmd.getColumnLabel(i)+" = "+rs.getInt(i));
+                }
+                if (rsmd.getColumnTypeName(i).equals("VARCHAR")){
+                    System.out.println(rsmd.getColumnLabel(i)+" = "+rs.getString(i));
+                }
+                if (i== rsmd.getColumnCount()){ //cuando i=nº columnas sales del bucle yendo al siguiente (NEXT)
+                    rs.next();
+                    i = 0;
+                }
+            }
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 
     public void delete(){
@@ -124,6 +179,6 @@ public abstract class DAO {
         sb.append(this.getClass().getName());
         sb.append(" WHERE ");
         sb.append(" ? =").append(" ?");
-        System.out.println("DELETE query --> "+sb.toString());
+        System.out.println("DELETE --> "+sb.toString());
     }
 }
