@@ -204,4 +204,16 @@ public abstract class DAO {
         }
         return listaUs;
     }
+
+    public  static  List<Oficina> getAllOficinas() throws SQLException {
+        List<Oficina> listaOf = new ArrayList<Oficina>();
+        Connection con = getConnection();
+        Statement stmt = con.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM Oficina");
+        while(rs.next()){
+            Oficina of = new Oficina(rs.getString("nombre"),rs.getString("direccion"));
+            listaOf.add(of);
+        }
+        return listaOf;
+    }
 }

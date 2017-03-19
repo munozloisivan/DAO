@@ -13,16 +13,25 @@ public class Main {
        u.select(4); //
        // u.select(3);
        // u.delete(); //OK
-     // Oficina of = new Oficina("CBL","Baixllobregat");
+     Oficina of = new Oficina("CBL","Baixllobregat");
     //   of.insert(); //OK
         //of.select(1);
 
         //Lista USUARIOS
         List<Usuario> a = u.getAllUsers();
         int i = 0;
+        System.out.println("** USUARIOS **");
         for (Usuario usuario : a){
             System.out.println("id: "+(int)a.get(i).getId()+" | nombre: "+a.get(i).getNombre()+" | email: "+a.get(i).getEmail()+" | password: "+a.get(i).getPassword());
             i++;
         }
+
+       List<Oficina> b = of.getAllOficinas();
+       int j = 0;
+        System.out.println("** OFICINAS **");
+       for (Oficina oficina : b){
+           System.out.println("nombre : "+b.get(j).getNombre()+" | direccion: "+b.get(j).getDireccion());
+           j++;
+       }
     }
 }
