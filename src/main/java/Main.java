@@ -7,10 +7,13 @@ public class Main {
     public static void main(String[] args) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, SQLException {
         System.out.println("Hello World!");
 
-       Usuario u = new Usuario(4,"toni","toni@mail.com","password");
-       //u.insert(); //OK
+       Usuario u = new Usuario(3,"ivan","ivan@mail.com","password");
+      // Usuario prueba = new Usuario();
+       //prueba.setId(3);
+       u.insert(); //OK
        // u.update(); //OK
-       u.select(4); //
+      // u.select(4); //
+      // prueba.delete2();
        // u.select(3);
        // u.delete(); //OK
      Oficina of = new Oficina("CBL","Baixllobregat");

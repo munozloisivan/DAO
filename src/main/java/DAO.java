@@ -192,6 +192,28 @@ public abstract class DAO {
         System.out.println("DELETE --> "+sb.toString());
     }
 
+    public void delete2() throws SQLException {
+        StringBuffer sb = new StringBuffer("DELETE FROM ").append(this.getClass().getName());
+        sb.append(" WHERE id = ");
+        Field[] fields = this.getClass().getDeclaredFields();
+        sb.append(Integer.parseInt(getValues(fields[0])));
+        System.out.println("DELETE 2 --> "+sb.toString());
+
+        Connection con = getConnection();
+        try{
+            Statement stmt = con.createStatement();
+            stmt.executeUpdate(sb.toString());
+            /* executeUpdate --> executeQuery
+            Use executeUpdate() to issue data manipulation statements. executeQuery()
+            is only meant for SELECT queries (i.e. queries that return a result set).
+            http://stackoverflow.com/questions/1905607/cannot-issue-data-manipulation-statements-with-executequery
+            * */
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
     public static List<Usuario> getAllUsers() throws SQLException {
         List<Usuario> listaUs = new ArrayList<Usuario>();
         Connection con = getConnection();
