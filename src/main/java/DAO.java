@@ -6,6 +6,8 @@ import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import static org.apache.log4j.Logger.getLogger;
@@ -110,9 +112,17 @@ public abstract class DAO {
         try {
             PreparedStatement preparedStatement = con.prepareStatement(sb.toString());
             insertElementos(preparedStatement);
+           /* int x = 1;
+            Field[] fields2 = this.getClass().getDeclaredFields();
+            for (Field f : fields2){
+                String res = getValues(f);
+                System.out.println("VALORES "+res.toString()); // los coge bien
+                preparedStatement.setObject(i,res);
+                x++;
+            } */
             preparedStatement.execute();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -180,5 +190,18 @@ public abstract class DAO {
         sb.append(" WHERE ");
         sb.append(" ? =").append(" ?");
         System.out.println("DELETE --> "+sb.toString());
+    }
+
+    public static List<Usuario> getAllUsers() throws SQLException {
+        List<Usuario> listaUs = new ArrayList<Usuario>();
+        Connection con = getConnection();
+        Statement stmt = null;
+        stmt = con.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM Usuario");
+        while(rs.next()){
+            Usuario us = new Usuario(rs.getInt("id"),rs.getString("nombre"),rs.getString("email"),rs.getString("password"));
+            listaUs.add(us);
+        }
+        return listaUs;
     }
 }
