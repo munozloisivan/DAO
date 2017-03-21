@@ -65,9 +65,11 @@ public abstract class DAO {
 
     public void insertElementos(PreparedStatement preparedStatement) throws NoSuchMethodException, SQLException, InvocationTargetException, IllegalAccessException {
         int i = 1;
-        Field[] fields = this.getClass().getFields();
+        Field[] fields = this.getClass().getDeclaredFields();
+        System.out.println("**************** fields: "+fields.length);
         for (Field f : fields){
             String res = getValues(f);
+            System.out.println("************pos: "+i+" value: "+res);
             preparedStatement.setObject(i,res);
             i++;
         }
@@ -122,6 +124,7 @@ public abstract class DAO {
             } */
             preparedStatement.execute();
         } catch (SQLException e) {
+            e.printStackTrace();
             System.out.println(e.getMessage());
         }
     }
@@ -233,7 +236,7 @@ public abstract class DAO {
         Statement stmt = con.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT * FROM Oficina");
         while(rs.next()){
-            Oficina of = new Oficina(rs.getString("nombre"),rs.getString("direccion"));
+            Oficina of = new Oficina(rs.getInt("nombre"),rs.getString("direccion"));
             listaOf.add(of);
         }
         return listaOf;

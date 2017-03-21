@@ -7,27 +7,27 @@ public class Main {
     public static void main(String[] args) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, SQLException {
         System.out.println("Hello World!");
 
-       Usuario u = new Usuario(3,"ivan","ivan@mail.com","password");
+     //  Usuario u = new Usuario(3,"ivan","ivan@mail.com","password");
       // Usuario prueba = new Usuario();
        //prueba.setId(3);
-       u.insert(); //OK
+     //  u.insert(); //OK
        // u.update(); //OK
       // u.select(4); //
       // prueba.delete2();
        // u.select(3);
        // u.delete(); //OK
-     Oficina of = new Oficina("CBL","Baixllobregat");
-    //   of.insert(); //OK
+     Oficina of = new Oficina(3333333,"Baixllobregat");
+      of.insert(); //OK
         //of.select(1);
 
         //Lista USUARIOS
-        List<Usuario> a = u.getAllUsers();
+       /* List<Usuario> a = u.getAllUsers();
         int i = 0;
         System.out.println("** USUARIOS **");
         for (Usuario usuario : a){
             System.out.println("id: "+(int)a.get(i).getId()+" | nombre: "+a.get(i).getNombre()+" | email: "+a.get(i).getEmail()+" | password: "+a.get(i).getPassword());
             i++;
-        }
+        }*/
 
        List<Oficina> b = of.getAllOficinas();
        int j = 0;
