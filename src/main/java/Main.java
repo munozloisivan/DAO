@@ -16,7 +16,7 @@ public class Main {
       // prueba.delete2();
        // u.select(3);
        // u.delete(); //OK
-     Oficina of = new Oficina(3333333,"Baixllobregat");
+     Oficina of = new Oficina("camping","Arenys de Mar");
       of.insert(); //OK
         //of.select(1);
 

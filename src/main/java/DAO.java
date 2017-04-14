@@ -236,7 +236,7 @@ public abstract class DAO {
         Statement stmt = con.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT * FROM Oficina");
         while(rs.next()){
-            Oficina of = new Oficina(rs.getInt("nombre"),rs.getString("direccion"));
+            Oficina of = new Oficina(rs.getString("nombre"),rs.getString("direccion"));
             listaOf.add(of);
         }
         return listaOf;
