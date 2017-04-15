@@ -66,10 +66,10 @@ public abstract class DAO {
     public void insertElementos(PreparedStatement preparedStatement) throws NoSuchMethodException, SQLException, InvocationTargetException, IllegalAccessException {
         int i = 1;
         Field[] fields = this.getClass().getDeclaredFields();
-        System.out.println("**************** fields: "+fields.length);
+        System.out.println("fields: "+fields.length);
         for (Field f : fields){
             String res = getValues(f);
-            System.out.println("************pos: "+i+" value: "+res);
+            System.out.println("posicion: "+i+" value: "+res);
             preparedStatement.setObject(i,res);
             i++;
         }
@@ -197,9 +197,14 @@ public abstract class DAO {
 
     public void delete2() throws SQLException {
         StringBuffer sb = new StringBuffer("DELETE FROM ").append(this.getClass().getName());
-        sb.append(" WHERE id = ");
+        if(this.getClass().getName() == "Usuario"){sb.append(" WHERE id = ");}
+        else{sb.append(" WHERE nombre = '");}
         Field[] fields = this.getClass().getDeclaredFields();
-        sb.append(Integer.parseInt(getValues(fields[0])));
+        if (this.getClass().getName() == "Usuario"){
+        sb.append(Integer.parseInt(getValues(fields[0])));}
+        else{
+            sb.append(getValues(fields[0])+"'");
+        }
         System.out.println("DELETE 2 --> "+sb.toString());
 
         Connection con = getConnection();
@@ -216,6 +221,11 @@ public abstract class DAO {
             System.out.println(e.getMessage());
         }
     }
+
+    /*public void delete3() throws SQLException {
+        StringBuffer sb = new StringBuffer("DELETE FROM ").append(this.getClass().getName());
+        sb.append(" WHERE ")
+    }*/
 
     public static List<Usuario> getAllUsers() throws SQLException {
         List<Usuario> listaUs = new ArrayList<Usuario>();

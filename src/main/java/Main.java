@@ -16,10 +16,12 @@ public class Main {
       // prueba.delete2();
        // u.select(3);
        // u.delete(); //OK
-     Oficina of = new Oficina("camping","Arenys de Mar");
-      of.insert(); //OK
+     //Oficina of = new Oficina("camping","Arenys de Mar");
+      //of.insert(); //OK
         //of.select(1);
 
+        Oficina ofPrueba = new Oficina("camping","Arenys de Mar");
+        ofPrueba.delete2();
         //Lista USUARIOS
        /* List<Usuario> a = u.getAllUsers();
         int i = 0;
@@ -29,12 +31,12 @@ public class Main {
             i++;
         }*/
 
-       List<Oficina> b = of.getAllOficinas();
+    /*   List<Oficina> b = ofPrueba.getAllOficinas();
        int j = 0;
         System.out.println("** OFICINAS **");
        for (Oficina oficina : b){
            System.out.println("nombre : "+b.get(j).getNombre()+" | direccion: "+b.get(j).getDireccion());
            j++;
-       }
+       }*/
     }
 }
