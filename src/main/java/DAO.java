@@ -97,16 +97,6 @@ public abstract class DAO {
             if (j!= fields.length)
                 sb.append(",");
         }
-       /* int j = 0;
-        for (Field f : fields){
-            if (j == fields.length -1){
-                 sb.append(getValues(f));
-            }
-            else {
-                sb.append(getValues(f)+",");
-            }
-            j++;
-        }*/
         sb.append(")");
         System.out.println("INSERT --> "+sb.toString()+"\n");
 
@@ -114,14 +104,6 @@ public abstract class DAO {
         try {
             PreparedStatement preparedStatement = con.prepareStatement(sb.toString());
             insertElementos(preparedStatement);
-           /* int x = 1;
-            Field[] fields2 = this.getClass().getDeclaredFields();
-            for (Field f : fields2){
-                String res = getValues(f);
-                System.out.println("VALORES "+res.toString()); // los coge bien
-                preparedStatement.setObject(i,res);
-                x++;
-            } */
             preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -195,6 +177,20 @@ public abstract class DAO {
         System.out.println("DELETE --> "+sb.toString());
     }
 
+    public void deleteXid(int id){
+        StringBuffer sb = new StringBuffer("DELETE FROM ").append(this.getClass().getName());
+        sb.append(" WHERE ID = "+id);
+
+        Connection con = getConnection();
+        try{
+            PreparedStatement preparedStatement = con.prepareStatement(sb.toString());
+            preparedStatement.execute();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void delete2() throws SQLException {
         StringBuffer sb = new StringBuffer("DELETE FROM ").append(this.getClass().getName());
         if(this.getClass().getName() == "Usuario"){sb.append(" WHERE id = ");}
@@ -222,7 +218,7 @@ public abstract class DAO {
         }
     }
 
-    /*public void delete3() throws SQLException {
+    /*public void deleteXid() throws SQLException {
         StringBuffer sb = new StringBuffer("DELETE FROM ").append(this.getClass().getName());
         sb.append(" WHERE ")
     }*/

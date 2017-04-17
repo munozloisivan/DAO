@@ -1,6 +1,5 @@
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
-import java.util.List;
 
 public class Main {
 
@@ -20,8 +19,9 @@ public class Main {
       //of.insert(); //OK
         //of.select(1);
 
-        Oficina ofPrueba = new Oficina("camping","Arenys de Mar");
-        ofPrueba.delete2();
+        Oficina ofPrueba = new Oficina("city bcn","barcelona");
+        ofPrueba.select(3);
+        ofPrueba.deleteXid(3);
         //Lista USUARIOS
        /* List<Usuario> a = u.getAllUsers();
         int i = 0;

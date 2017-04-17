@@ -3,8 +3,9 @@
  */
 public class Oficina extends DAO{
 
-        private String nombre;
-        private String  direccion;
+        public int id;
+        public String nombre;
+        public String  direccion;
 
     public Oficina(String nombre, String direccion) {
         super();
@@ -12,7 +13,18 @@ public class Oficina extends DAO{
         this.direccion = direccion;
     }
 
-    public Oficina(){}
+    public Oficina(){
+        super();
+    }
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getNombre() {
         return nombre;
