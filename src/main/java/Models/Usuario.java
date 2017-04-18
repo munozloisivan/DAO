@@ -1,4 +1,6 @@
+package Models;
 
+import DAO.DAO;
 
 /**
  * Created by ivanm on 15/03/2017.
@@ -7,7 +9,14 @@ public class Usuario extends DAO {
     public int id;
     public String nombre, email, password;
 
-    public Usuario(int id, String nombre, String email, String password) {
+    public Usuario(String nombre, String email, String password) {
+        super();
+        this.nombre = nombre;
+        this.email = email;
+        this.password = password;
+    }
+
+    public Usuario(int id, String nombre, String email, String password){
         super();
         this.id = id;
         this.nombre = nombre;

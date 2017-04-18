@@ -1,7 +1,11 @@
+package Models;
+
+import DAO.DAO;
+
 /**
  * Created by ivanm on 15/03/2017.
  */
-public class Oficina extends DAO{
+public class Oficina extends DAO {
 
         public int id;
         public String nombre;

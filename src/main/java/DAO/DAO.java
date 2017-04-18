@@ -1,3 +1,7 @@
+package DAO;
+
+import Models.Oficina;
+import Models.Usuario;
 import org.apache.log4j.Logger;
 
 import java.lang.reflect.Field;
@@ -17,7 +21,7 @@ import static org.apache.log4j.Logger.getLogger;
  */
 public abstract class DAO {
 
-    //final static Logger logger = getLogger("DAO");
+    //final static Logger logger = getLogger("DAO.DAO");
 
     //Conexión a la BBDD
     public static Connection getConnection(){
@@ -75,6 +79,23 @@ public abstract class DAO {
         }
     }
 
+    public  void insertElementos2(PreparedStatement preparedStatement) throws SQLException {
+        int i = 1;
+        Field[] fields = this.getClass().getDeclaredFields();
+        for (Field f : fields){
+            if (fields.getClass().getSimpleName().equals("id")){
+                System.out.println(fields.getClass().getSimpleName().toString());
+            }
+            else{
+                String res = getValues(f);
+                preparedStatement.setObject(i,res);
+            }
+            i++;
+        }
+    }
+
+
+
     public void insert() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         StringBuffer sb = new StringBuffer("INSERT INTO ").append(this.getClass().getName());
 
@@ -112,9 +133,12 @@ public abstract class DAO {
     }
 
 
-    public void update(){
+    public void update(int pk) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        //Update TABLE SET Columna='valoraasigar' WHERE ID = 'pk'
+
         System.out.println("Update: " +this.getClass().getName());
-        StringBuffer sb = new StringBuffer("UPDATE ").append(this.getClass().getName()).append(" SET ");
+        StringBuffer sb = new StringBuffer("UPDATE ").append(this.getClass().getName());
+        sb.append(" SET ");
 
         Field[] fields = this.getClass().getDeclaredFields();
         int numfields = 0;
@@ -127,15 +151,20 @@ public abstract class DAO {
             }
             numfields++;
         }
-        System.out.println("UPDATE --> "+sb.toString());
-    }
 
-    public void select(){
-        StringBuffer sb = new StringBuffer("SELECT * FROM ").append(this.getClass().getName());
-        sb.append(" WHERE ");
-        sb.append(" ? = ?");
+        Connection con = getConnection();
+        try{
+            PreparedStatement preparedStatement = con.prepareStatement(sb.toString());
+            insertElementos2(preparedStatement);
+           // sb.append(preparedStatement+ " WHERE ID = "+pk);
+          //  System.out.println(sb.toString());
+            //sb.append(" WHERE ID = "+pk);
+        }
 
-        System.out.println("SELECT --> "+sb.toString() );
+        catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
     }
 
     public void select(int pk){
@@ -165,16 +194,9 @@ public abstract class DAO {
             }
         }
         catch (Exception e){
+            e.printStackTrace();
             System.out.println(e.getMessage());
         }
-    }
-
-    public void delete(){
-        StringBuffer sb = new StringBuffer("DELETE FROM ");
-        sb.append(this.getClass().getName());
-        sb.append(" WHERE ");
-        sb.append(" ? =").append(" ?");
-        System.out.println("DELETE --> "+sb.toString());
     }
 
     public void deleteXid(int id){
@@ -188,15 +210,16 @@ public abstract class DAO {
         }
         catch (SQLException e) {
             e.printStackTrace();
+            System.out.println(""+e.getMessage());
         }
     }
 
     public void delete2() throws SQLException {
         StringBuffer sb = new StringBuffer("DELETE FROM ").append(this.getClass().getName());
-        if(this.getClass().getName() == "Usuario"){sb.append(" WHERE id = ");}
+        if(this.getClass().getName() == "Models.Usuario"){sb.append(" WHERE id = ");}
         else{sb.append(" WHERE nombre = '");}
         Field[] fields = this.getClass().getDeclaredFields();
-        if (this.getClass().getName() == "Usuario"){
+        if (this.getClass().getName() == "Models.Usuario"){
         sb.append(Integer.parseInt(getValues(fields[0])));}
         else{
             sb.append(getValues(fields[0])+"'");
@@ -218,11 +241,6 @@ public abstract class DAO {
         }
     }
 
-    /*public void deleteXid() throws SQLException {
-        StringBuffer sb = new StringBuffer("DELETE FROM ").append(this.getClass().getName());
-        sb.append(" WHERE ")
-    }*/
-
     public static List<Usuario> getAllUsers() throws SQLException {
         List<Usuario> listaUs = new ArrayList<Usuario>();
         Connection con = getConnection();
@@ -230,7 +248,7 @@ public abstract class DAO {
         stmt = con.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT * FROM Usuario");
         while(rs.next()){
-            Usuario us = new Usuario(rs.getInt("id"),rs.getString("nombre"),rs.getString("email"),rs.getString("password"));
+            Usuario us = new Usuario(rs.getString("nombre"),rs.getString("email"),rs.getString("password"));
             listaUs.add(us);
         }
         return listaUs;
